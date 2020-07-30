@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
+use App\Helpers;
+use App\Helpers\RfcValidate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Helpers;
-use App\Client;
 
 class ClientController extends Controller {
 
     public function index() {
-        
+
         $clientes = DB::table('clients')->get();
-       
+
         return view('client.index', [
             'clientes' => $clientes
         ]);
@@ -81,20 +82,20 @@ class ClientController extends Controller {
 
         return redirect()->action('ClientController@index');
     }
-    
+
     public function search(Request $request){
-        
+
         $search = $request->input('search');
-        
+
         $clientes = Client::where('clave', 'LIKE', '%'.$search.'%')
                 ->orWhere('nom_com', 'LIKE', '%'.$search.'%')
                 ->orWhere('rfc', 'LIKE', '%'.$search.'%')
                 ->orderBy('id', 'desc')
                 ->paginate(5);
         return view('client.searched',[
-           'clientes' => $clientes 
+           'clientes' => $clientes
         ]);
-        
+
     }
 
 }
